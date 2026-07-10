@@ -8,6 +8,9 @@
             <h3 class="fw-bold text-success mb-1">📋 Laporan Hasil Kuis</h3>
             <p class="text-muted small mb-0">Halaman khusus admin untuk memantau nilai dan durasi pengerjaan kuis peserta.</p>
         </div>
+        <div>
+            <button class="btn btn-sm btn-danger shadow-sm"><i class="fa-solid fa-file-pdf me-1"></i> Cetak PDF</button>
+        </div>
     </div>
 
     <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
