@@ -20,24 +20,26 @@
             <p class="text-white-50 mb-4">Uji wawasan Al-Qur'anmu lewat kuis interaktif berbasis ayat acak!</p>
             
             <!-- Deteksi Status Login User secara Dinamis -->
-            @auth
-                <!-- Jika Sudah Login -->
-                <a href="{{ route('quiz.index') }}" class="btn btn-warning btn-lg fw-bold shadow-sm px-4">
-                    <i class="fa-solid fa-gauge me-2"></i>Masuk ke Dashboard Kuis
-                </a>
-            @else
-                <!-- Jika Belum Login -->
-                @if (Route::has('login'))
-                    <a href="{{ route('login') }}" class="btn btn-light btn-lg me-2 fw-bold px-4">
-                        <i class="fa-solid fa-right-to-bracket me-2"></i>Login
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                @auth
+                    <!-- Jika Sudah Login (Mengarahkan ke Route Dashboard Utama) -->
+                    <a href="{{ route('dashboard') }}" class="btn btn-warning btn-lg fw-bold shadow-sm px-4">
+                        <i class="fa-solid fa-gauge me-2"></i>Masuk ke Dashboard Kuis
                     </a>
-                @endif
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg fw-bold px-4">
-                        <i class="fa-solid fa-user-plus me-2"></i>Register
-                    </a>
-                @endif
-            @endauth
+                @else
+                    <!-- Jika Belum Login -->
+                    @if (Route::has('login'))
+                        <a href="{{ route('login') }}" class="btn btn-light btn-lg fw-bold px-4">
+                            <i class="fa-solid fa-right-to-bracket me-2"></i>Login
+                        </a>
+                    @endif
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg fw-bold px-4">
+                            <i class="fa-solid fa-user-plus me-2"></i>Register
+                        </a>
+                    @endif
+                @endauth
+            </div>
         </div>
     </div>
 </body>

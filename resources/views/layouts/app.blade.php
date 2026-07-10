@@ -23,7 +23,6 @@
                 <ul class="navbar-nav ms-auto align-items-center">
                     <!-- JIKA USER SUDAH LOGIN -->
                     @auth
-                        <!-- Menu utama untuk semua user yang login -->
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('dashboard') ? 'active fw-bold' : '' }}" href="{{ route('dashboard') }}">
                                 <i class="fa-solid fa-gauge me-1"></i> Dashboard
@@ -34,12 +33,12 @@
                         @if(auth()->user()->email !== 'peserta@user.com')
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('admin.users.index') ? 'active fw-bold text-warning' : '' }}" href="{{ route('admin.users.index') }}">
-                                <i class="fa-solid fa-user-shield me-1"></i> Data User
+                                    <i class="fa-solid fa-user-shield me-1"></i> Data User
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('admin.rekap.nilai') ? 'active fw-bold text-warning' : '' }}" href="{{ route('admin.rekap.nilai') }}">
-                                <i class="fa-solid fa-chart-simple me-1"></i> Rekap Nilai
+                                    <i class="fa-solid fa-chart-simple me-1"></i> Rekap Nilai
                                 </a>
                             </li>
                         @endif
@@ -100,6 +99,169 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
     @yield('scripts')
+
+    <!-- CHATBOT HANYA DIAKSES JIKA USER SUDAH LOGIN -->
+    @auth
+    <!-- Chatbot Widget -->
+    <div id="chatbot-container" style="position:fixed; bottom:20px; right:20px; z-index:9999;">
+
+        <!-- Tombol buka chatbot -->
+        <button id="chatbot-toggle" onclick="toggleChatbot()"
+            class="btn btn-success rounded-circle shadow"
+            style="width:60px; height:60px; font-size:24px;">
+            <i class="fa-solid fa-comment-dots"></i>
+        </button>
+
+        <!-- Kotak chat -->
+        <div id="chatbot-box"
+            style="display:none; width:350px; height:450px; background:white; border-radius:12px;
+                   box-shadow:0 4px 20px rgba(0,0,0,0.2); margin-bottom:10px; flex-direction:column; overflow:hidden;">
+
+            <!-- Header -->
+            <div class="bg-success text-white p-3 d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fa-solid fa-robot"></i>
+                    <strong> Asisten Al-Qur'an</strong>
+                </div>
+                <button onclick="toggleChatbot()" class="btn btn-sm btn-outline-light">✕</button>
+            </div>
+
+            <!-- Area chat -->
+            <div id="chat-messages"
+                style="flex:1; overflow-y:auto; padding:15px; height:300px; background:#f8f9fa;">
+                <div class="text-center text-muted small mb-3">
+                    Tanyakan apa saja seputar Al-Qur'an & Tafsir
+                </div>
+                <div class="d-flex mb-2">
+                    <div class="bg-success text-white rounded p-2 small" style="max-width:80%;">
+                        Assalamu'alaikum! Saya siap membantu menjawab pertanyaan seputar Al-Qur'an dan tafsir. Silakan tanya! 😊
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input area -->
+            <div class="p-3 border-top bg-white">
+                <div class="input-group">
+                    <input type="text" id="chat-input"
+                        class="form-control form-control-sm"
+                        placeholder="Ketik pertanyaan..."
+                        onkeypress="handleEnter(event)">
+                    <button class="btn btn-success btn-sm" onclick="sendMessage()">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleChatbot() {
+            const box = document.getElementById('chatbot-box');
+            if (box.style.display === 'none') {
+                box.style.display = 'flex';
+                box.style.flexDirection = 'column';
+            } else {
+                box.style.display = 'none';
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function removeLoading() {
+            const loadingMsg = document.getElementById('loading-msg');
+            if (loadingMsg) {
+                loadingMsg.remove();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            const messagesDiv = document.getElementById('chat-messages');
+
+            // Tampilkan pesan user
+            messagesDiv.innerHTML += `
+                <div class="d-flex justify-content-end mb-2">
+                    <div class="bg-primary text-white rounded p-2 small" style="max-width:80%;">
+                        ${message}
+                    </div>
+                </div>`;
+
+            removeLoading();
+
+            // Tampilkan loading spinner
+            messagesDiv.innerHTML += `
+                <div class="d-flex mb-2" id="loading-msg">
+                    <div class="bg-light border rounded p-2 small text-muted">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Sedang menjawab...
+                    </div>
+                </div>`;
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            input.value = '';
+
+            // Jalankan request ke endpoint Laravel
+            fetch('{{ route("chatbot.ask") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                removeLoading();
+
+                // Membaca key 'error' atau 'reply' dari ChatbotController secara konsisten
+                if (data.error) {
+                    messagesDiv.innerHTML += `
+                        <div class="d-flex mb-2">
+                            <div class="bg-danger text-white rounded p-2 small" style="max-width:80%;">
+                                ❌ ${data.error}
+                            </div>
+                        </div>`;
+                } else if (data.reply) {
+                    const formattedAnswer = data.reply.replace(/\n/g, '<br>');
+                    messagesDiv.innerHTML += `
+                        <div class="d-flex mb-2">
+                            <div class="bg-success text-white rounded p-2 small" style="max-width:80%;">
+                                ${formattedAnswer}
+                            </div>
+                        </div>`;
+                } else {
+                    messagesDiv.innerHTML += `
+                        <div class="d-flex mb-2">
+                            <div class="bg-danger text-white rounded p-2 small" style="max-width:80%;">
+                                ❌ Terjadi kesalahan format data dari server.
+                            </div>
+                        </div>`;
+                }
+
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            })
+            .catch(err => {
+                removeLoading();
+                
+                messagesDiv.innerHTML += `
+                    <div class="d-flex mb-2">
+                        <div class="bg-danger text-white rounded p-2 small" style="max-width:80%;">
+                            ❌ Gagal menghubungi server. Jalur koneksi terputus.
+                        </div>
+                    </div>`;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            });
+        }
+    </script>
+    @endauth
 </body>
 </html>
