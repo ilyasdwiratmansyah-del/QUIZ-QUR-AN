@@ -5,12 +5,11 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="fw-bold text-success mb-1">📊 Rekap Nilai Kuis</h3>
-            <p class="text-muted small mb-0">Memantau seluruh hasil nilai dan durasi pengerjaan kuis dari para peserta.</p>
+            <h3 class="fw-bold text-success mb-1">📋 Laporan Hasil Kuis</h3>
+            <p class="text-muted small mb-0">Halaman khusus admin untuk memantau nilai dan durasi pengerjaan kuis peserta.</p>
         </div>
     </div>
 
-    <!-- Tabel Rekap Nilai -->
     <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -74,7 +73,6 @@
         </div>
     </div>
 
-    <!-- Pagination Link -->
     <div class="d-flex justify-content-end mt-3">
         {{ $results->links() }}
     </div>
