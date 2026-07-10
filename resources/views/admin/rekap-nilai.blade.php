@@ -18,14 +18,14 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="table-success text-dark">
+                    <thead class="bg-success text-white">
                         <tr>
                             <th class="ps-4 py-3" style="width: 60px;">No</th>
-                            <th py-3>Nama Peserta</th>
-                            <th py-3>Email</th>
-                            <th class="text-center" py-3>Jawaban Benar</th>
-                            <th class="text-center" py-3>Skor Akhir</th>
-                            <th class="text-center" py-3>Durasi</th>
+                            <th class="py-3">Nama Peserta</th>
+                            <th class="py-3">Email</th>
+                            <th class="text-center" class="py-3">Jawaban Benar</th>
+                            <th class="text-center" class="py-3">Skor Akhir</th>
+                            <th class="text-center" class="py-3">Durasi</th>
                             <th class="pe-4 py-3 text-end" style="width: 200px;">Tanggal Main</th>
                         </tr>
                     </thead>
