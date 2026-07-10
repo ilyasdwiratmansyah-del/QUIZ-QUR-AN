@@ -14,6 +14,13 @@
         </div>
     </div>
 
+    <div class="mb-3">
+        <div class="input-group input-group-sm" style="max-width: 300px;">
+            <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="text" class="form-control border-start-0" placeholder="Cari nama peserta...">
+        </div>
+    </div>
+
     <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
         <div class="card-body p-0">
             <div class="table-responsive">
