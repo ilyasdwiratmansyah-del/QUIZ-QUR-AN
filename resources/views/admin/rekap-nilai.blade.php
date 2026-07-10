@@ -7,6 +7,9 @@
         <div>
             <h3 class="fw-bold text-success mb-1">📋 Laporan Hasil Kuis</h3>
             <p class="text-muted small mb-0">Halaman khusus admin untuk memantau nilai dan durasi pengerjaan kuis peserta.</p>
+            <small class="text-success fw-medium d-block mt-1">
+                <i class="fa-solid fa-users me-1"></i> Total data peserta: {{ $results->total() }} orang ditemukan
+            </small>
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-sm btn-outline-success shadow-sm"><i class="fa-solid fa-file-excel me-1"></i> Export Excel</button>
