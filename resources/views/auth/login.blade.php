@@ -7,7 +7,7 @@
         <div class="card shadow border-0 rounded-3">
             <div class="card-body p-5">
                 <div class="text-center mb-4">
-                    <h3 class="fw-bold text-success">QuranQuiz</h3>
+                    <h3 class="fw-bold text-success">Quiz Surat</h3>
                     <p class="text-muted small">Silakan masuk untuk memulai kuis</p>
                 </div>
 
